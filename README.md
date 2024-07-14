@@ -1,5 +1,9 @@
 # sma_project_repo
+```
 The repo which contains all the artifacts used for capstone project for the course "Stock Market Analytics Zoomcamp 2024"
+```
+# Problem Statement
+
 
 
 # folder and it's significance 
@@ -11,3 +15,6 @@ The repo which contains all the artifacts used for capstone project for the cour
 `script_test.ipynb` ---> Testing each script before using it in the main python file.
 
 `main.py` ---> to be used for direct execution for cron jobs
+
+
+# how to run the repo 
