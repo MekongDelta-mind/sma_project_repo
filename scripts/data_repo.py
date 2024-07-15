@@ -114,10 +114,10 @@ class DataRepository:
       time.sleep(1)
 
 
-      if stocks_df.empty:
-        stocks_df = historyPrices
+      if self.ticker_df is None:
+        self.ticker_df = historyPrices
       else:
-        stocks_df = pd.concat([stocks_df, historyPrices], ignore_index=True)
+        self.ticker_df = pd.concat([self.ticker_df, historyPrices], ignore_index=True)
       
   def fetch_indexes(self, start_date = None, end_date = None):
     '''Fetch Indexes data from the Yfinance API'''
@@ -218,7 +218,7 @@ class DataRepository:
     time.sleep(1)
     
     # Prepare to merge
-    nifty_50_to_merge = self.get_growth_df(nifty_50_df,'nifty')
+    nifty_50_to_merge = self._get_growth_df(nifty_50_df,'nifty')
     snp500_daily_to_merge = self._get_growth_df(snp500_daily, 'snp500')
     dji_daily_to_merge = self._get_growth_df(dji_daily, 'dji')
     vix_to_merge = vix.rename(columns={'Adj Close':'vix_adj_close'})[['vix_adj_close']]

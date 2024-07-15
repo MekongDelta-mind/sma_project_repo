@@ -12,7 +12,7 @@ class TransformData:
   def __init__(self, repo:DataRepository):
     # copy initial dfs from repo
     self.tickers_df = repo.ticker_df.copy(deep=True)
-    self.macro_df = repo.macro_df.copy(deep=True)
+    # self.macro_df = repo.macro_df.copy(deep=True)
     self.indexes_df = repo.indexes_df.copy(deep=True)
     
     # init transformed_df
@@ -48,7 +48,9 @@ class TransformData:
 
     # tickers = tqdm(self.tickers_df.Ticker.unique())
 
-    merged_df = self.tickers_df 
+    ticker_df = self.tickers_df
+    ticker_df['Date']= pd.to_datetime(ticker_df['Date'], utc=True)
+    merged_df = ticker_df
 
     self.transformed_df = merged_df
 

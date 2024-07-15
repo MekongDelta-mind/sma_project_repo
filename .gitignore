@@ -7,3 +7,4 @@
 # folders
 **.virtual_documents
 local_data/
+**__pycache__

@@ -43,6 +43,9 @@ class TrainModel:
 
 
   def __init__(self, transformed:TransformData):
+    ''' constructor to instanciate the class 
+    transformed: takes the transformed object using the TransformData class
+    '''
     # init transformed_df
     self.transformed_df = transformed.transformed_df.copy(deep=True)
     self.transformed_df['ln_volume'] = self.transformed_df.Volume.apply(lambda x: np.log(x) if x >0 else np.nan)
@@ -51,29 +54,14 @@ class TrainModel:
   def _define_feature_sets(self):
     self.GROWTH = [g for g in self.transformed_df if (g.find('growth_')==0)&(g.find('future')<0)]
     self.OHLCV = ['Open','High','Low','Close','Adj Close','Volume']
-    self.CATEGORICAL = ['Month', 'Weekday', 'Ticker', 'ticker_type']
+    self.CATEGORICAL = ['Month', 'Weekday', 'Ticker']
     self.TO_PREDICT = [g for g in self.transformed_df.keys() if (g.find('future')>=0)]
-    self.MACRO = ['gdppot_us_yoy', 'gdppot_us_qoq', 'cpi_core_yoy', 'cpi_core_mom', 'FEDFUNDS',
-        'DGS1', 'DGS5', 'DGS10']
     self.CUSTOM_NUMERICAL = ['vix_adj_close','SMA10', 'SMA20', 'growing_moving_average', 'high_minus_low_relative','volatility', 'ln_volume']
     
     # artifacts from joins and/or unused original vars
-    self.TO_DROP = ['Year','Date','Month_x', 'Month_y', 'index', 'Quarter','index_x','index_y'] + self.CATEGORICAL + self.OHLCV
-
-    # All Supported Ta-lib indicators: https://github.com/TA-Lib/ta-lib-python/blob/master/docs/funcs.md
-    self.TECHNICAL_INDICATORS = ['adx', 'adxr', 'apo', 'aroon_1','aroon_2', 'aroonosc',
-      'bop', 'cci', 'cmo','dx', 'macd', 'macdsignal', 'macdhist', 'macd_ext',
-      'macdsignal_ext', 'macdhist_ext', 'macd_fix', 'macdsignal_fix',
-      'macdhist_fix', 'mfi', 'minus_di', 'mom', 'plus_di', 'dm', 'ppo',
-      'roc', 'rocp', 'rocr', 'rocr100', 'rsi', 'slowk', 'slowd', 'fastk',
-      'fastd', 'fastk_rsi', 'fastd_rsi', 'trix', 'ultosc', 'willr',
-      'ad', 'adosc', 'obv', 'atr', 'natr', 'ht_dcperiod', 'ht_dcphase',
-      'ht_phasor_inphase', 'ht_phasor_quadrature', 'ht_sine_sine', 'ht_sine_leadsine',
-      'ht_trendmod', 'avgprice', 'medprice', 'typprice', 'wclprice']
-    self.TECHNICAL_PATTERNS =  [g for g in self.transformed_df.keys() if g.find('cdl')>=0]
+    self.TO_DROP = ['Year','Date'] + self.CATEGORICAL + self.OHLCV
     
-    self.NUMERICAL = self.GROWTH + self.TECHNICAL_INDICATORS + self.TECHNICAL_PATTERNS + \
-        self.CUSTOM_NUMERICAL + self.MACRO
+    self.NUMERICAL = self.GROWTH + self.CUSTOM_NUMERICAL
     
     # CHECK: NO OTHER INDICATORS LEFT
     self.OTHER = [k for k in self.transformed_df.keys() if k not in self.OHLCV + self.CATEGORICAL + self.NUMERICAL + self.TO_DROP + self.TO_PREDICT]
@@ -82,7 +70,7 @@ class TrainModel:
   def _define_dummies(self):
     # dummy variables can't be generated from Date and numeric variables ==> convert to STRING (to define groups for Dummies)
     # self.transformed_df.loc[:,'Month'] = self.transformed_df.Month_x.dt.strftime('%B')
-    self.transformed_df.loc[:,'Month'] = self.transformed_df.Month_x.astype(str)
+    self.transformed_df.loc[:,'Month'] = self.transformed_df.Month.astype(str)
     self.transformed_df['Weekday'] = self.transformed_df['Weekday'].astype(str)  
 
     # Generate dummy variables (no need for bool, let's have int32 instead)
@@ -91,31 +79,35 @@ class TrainModel:
     # get dummies names in a list
     self.DUMMIES = dummy_variables.keys().to_list()
 
-  def _perform_temporal_split(self, df:pd.DataFrame, min_date, max_date, train_prop=0.7, val_prop=0.15, test_prop=0.15):
+  def _perform_temporal_split(self, df:pd.DataFrame, min_date_df, max_date_df, train_prop=0.7, val_prop=0.15, test_prop=0.15):
     """
     Splits a DataFrame into three buckets based on the temporal order of the 'Date' column.
 
     Args:
         df (DataFrame): The DataFrame to split.
-        min_date (str or Timestamp): Minimum date in the DataFrame.
-        max_date (str or Timestamp): Maximum date in the DataFrame.
-        train_prop (float): Proportion of data for training set (default: 0.7).
-        val_prop (float): Proportion of data for validation set (default: 0.15).
-        test_prop (float): Proportion of data for test set (default: 0.15).
+        min_date_df (str or Timestamp): Minimum date in the DataFrame.
+        max_date_df (str or Timestamp): Maximum date in the DataFrame.
 
     Returns:
         DataFrame: The input DataFrame with a new column 'split' indicating the split for each row.
     """
-    # Define the date intervals
-    train_end = min_date + pd.Timedelta(days=(max_date - min_date).days * train_prop)
-    val_end = train_end + pd.Timedelta(days=(max_date - min_date).days * val_prop)
+
+    # Calculate the training end date (end_date - 2 years)
+    train_end = max_date_df - pd.DateOffset(years=2)
+
+    # Calculate the validation end date (end_date - 1 year)
+    val_end = max_date_df - pd.DateOffset(years=1)
+
+    print(f'The training period is from {min_date_df} to {train_end} \n')
+    print(f'The validtion period is from {train_end} to {val_end} \n')
+    print(f'The test period is from {val_end} to {max_date_df} \n')
 
     # Assign split labels based on date ranges
     split_labels = []
     for date in df['Date']:
         if date <= train_end:
             split_labels.append('train')
-        elif date <= val_end:
+        elif (date > train_end)  & (date <= val_end):
             split_labels.append('validation')
         else:
             split_labels.append('test')
@@ -184,20 +176,19 @@ class TrainModel:
     # temporal split
     min_date_df = self.df_full.Date.min()
     max_date_df = self.df_full.Date.max()
-    self._perform_temporal_split(self.df_full, min_date=min_date_df, max_date=max_date_df)
+    self._perform_temporal_split(self.df_full, min_date_df=min_date_df,max_date_df=max_date_df)
 
     # define dataframes for ML
     self._define_dataframes_for_ML()
 
     return
   
-  def train_random_forest(self, max_depth=17, n_estimators=200):
+  # THIS SHOULD BE CHANGED TO train_decision_forest and the respective best parameters
+  def train_model(self, max_depth=10):
     # https://scikit-learn.org/stable/modules/ensemble.html#random-forests-and-other-randomized-tree-ensembles
-    print('Training the best model (RandomForest (max_depth=17, n_estimators=200))')
-    self.model = RandomForestClassifier(n_estimators = n_estimators,
-                                 max_depth = max_depth,
-                                 random_state = 42,
-                                 n_jobs = -1)
+    print('Training the best model (DecisionTreeClassifier(max_depth=10, random_state=42))')
+    self.model = DecisionTreeClassifier(max_depth=max_depth,
+                               random_state=42)
 
     self.model = self.model.fit(self.X_train_valid, self.y_train_valid)
 

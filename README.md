@@ -9,8 +9,10 @@ We want to create a portofolio of 10 stocks from the NIFTY 50 index list of stoc
 This is a mere analysis of shorts and can be extended to any period of time. 
 The period choosen for the analysis is from 1st April, 2009( just after the financial crisis ) to 31st March,2024. 
 
-It is assumed as if we have the data from 1st April, 2009 onwards upto <u>31st March,2023</u>. And since 1st april, 2023, we are investing $1200 in total in both SBI NIFTY 50 ETF (SYMBOL-> NSE:SETFNIF50 ) and the portfolio of stocks we would decide for next 12 months.
-So we would be investing $100 in both ETF and our pre-analysed-portfolio(consisting of few stocks), every month , from 1st April,2023 to 31st March, 2024. At the end of the 1 year, that is 1st April,2024, we would compare the growth in investment between ETF and pre-analysed-portfolio: whether it beats the ETF or not or remains same.
+It is assumed as if we have the data from 1st April, 2009 onwards upto <u>31st March,2023</u>. And since 1st april, 2023, we are investing $12000 in total in both SBI NIFTY 50 ETF (SYMBOL-> NSE:SETFNIF50 ) and the portfolio of stocks we would decide for next 12 months.
+* So we would be investing $1000 in both ETF, every month , from 1st April,2023 to 31st March, 2024. 
+* For the pre-analysed portfolio
+At the end of the 1 year, that is 1st April,2024, we would compare the growth in investment between ETF and pre-analysed-portfolio: whether it beats the ETF or not or remains same.
 
 The charges considered are as per the Zerodha's Equity delivery charges:
 
@@ -40,4 +42,23 @@ NOTE:
 `main.py` ---> to be used for direct execution for cron jobs
 
 
-# how to run the repo 
+# Running the repo locally
+
+## Setting up the environment (in Terminal using `conda`)
+
+1. First clone the project from the branch <create a capstone 1 branch> 
+1. Change the directory to the  `sma_project_repo`  with the command `cd sma_project_repo`.
+1. You can use conda or venv to create the virtual environment. Here we are using the virtual environment.
+    1. Create a clone of your base conda environment using command `conda create --name sma_project --clone base`
+    1. Activate the environment with `conda activate sma_project`.
+    1. Using pip install the necessary requirments into the new environment with command `python -m pip install -r requirements.txt`
+
+## Running the project
+
+< Here things you need to run the scripts would be mentioned >
+
+
+## Future Improvements or Thing yet to be done:
+
+1. Not implemented the trading Simulation as per problem statement which would be very different from what has been done in the course. This is an analysis and so we have to create a new type of simulation strategy to comapre the investments growth when the money is invested in ETF (monthly) and 
+1. 
