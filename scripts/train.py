@@ -7,8 +7,8 @@ import joblib
 from scripts.transform import TransformData
 
 # ML models and utils
-# from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.tree import DecisionTreeClassifier
+# from sklearn.ensemble import RandomForestClassifier
 # from sklearn.metrics import accuracy_score
 # from sklearn.metrics import precision_score
 
