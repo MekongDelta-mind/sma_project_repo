@@ -4,7 +4,7 @@ The repo which contains all the artifacts used for capstone project for the cour
 ```
 # Problem Statement
 
-We want to create a portofolio of 10-12 stocks from the NIFTY 50 index list of stocks to maximize the profit. The aim is to get a return of atleast 14 % in Indian markets by investing in few stocks which would give a high growth to the invested corpus.
+We want to create a portofolio of 10 stocks from the NIFTY 50 index list of stocks to maximize the profit. The aim is to get a return of atleast 14 % in Indian markets by investing in few stocks which would give a high growth to the invested corpus.
 
 This is a mere analysis of shorts and can be extended to any period of time. 
 The period choosen for the analysis is from 1st April, 2009( just after the financial crisis ) to 31st March,2024. 
