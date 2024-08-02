@@ -78,3 +78,6 @@ P.S. For both the cases, if all the cells run without error you will get the out
 ## Future Improvements or Thing yet to be done:
 
 1. Not implemented the trading Simulation as per problem statement which would be very different from what has been done in the course. This is an analysis and so we have to create a new type of simulation strategy to comapre the investments growth when the money is invested in ETF (monthly) and on all the pre-analysed portfolio.
+
+
+The course for which this was a project is `Stock Market Analytics Zoomcamp` and link to the repo is [here](https://github.com/DataTalksClub/stock-markets-analytics-zoomcamp).
