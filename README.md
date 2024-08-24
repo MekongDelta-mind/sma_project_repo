@@ -1,6 +1,7 @@
 # sma_project_repo
 ```
-The repo which contains all the artifacts used for capstone project for the course "Stock Market Analytics Zoomcamp 2024"
+The repo which contains all the artifacts used for capstone project
+for the course "Stock Market Analytics Zoomcamp 2024"
 ```
 # Problem Statement
 
@@ -80,4 +81,20 @@ P.S. For both the cases, if all the cells run without error you will get the out
 1. Not implemented the trading Simulation as per problem statement which would be very different from what has been done in the course. This is an analysis and so we have to create a new type of simulation strategy to comapre the investments growth when the money is invested in ETF (monthly) and on all the pre-analysed portfolio.
 
 
-The course for which this was a project is `Stock Market Analytics Zoomcamp` and link to the repo is [here](https://github.com/DataTalksClub/stock-markets-analytics-zoomcamp).
+## Feedback for project submitted:
+
+- Outside of US market review with large datsets
+- Added bonus point for the interesting long-term strategy proposed.
+    - In general, the work looks interesting and promising, additional analysis is made. It would be great to have more illustrations for evaluation of the proposed strategy (if it was actually more beneficial than NIFTY 50).
+        - `Comments for future ref` by me ( @MekongDelta-mind ) :
+            - This is the Simulation part of the projects which looked upon again.
+- The project has potential, especially with its focus on Indian investments, which I found quite interesting.
+    - However, there are several areas that need improvement.
+    - The requirements file includes references to local pip dependencies, which complicates the setup process. I could not reproduce the instructions as they currently stand. The instructions should be more detailed and laid out in a step-by-step manner to ensure clarity.
+        - `Comments for future ref` by me ( @MekongDelta-mind ) :
+            - I have tried and it is wokring on my local setup with a new python environment. I think I need to use docker to really find the root cause of the same.
+    - Additionally, providing an overview of the repository would greatly help in understanding the project's structure and purpose. Improving these aspects would make the project more accessible and user-friendly.
+        - `Comments for future ref` by me ( @MekongDelta-mind ) :
+            - I've to still think about how the struture could be more user-friendly.
+
+The project was part of the "Stock Market Analytics Zoomcamp" course. You can find the link to the repository [here](https://github.com/DataTalksClub/stock-markets-analytics-zoomcamp).
